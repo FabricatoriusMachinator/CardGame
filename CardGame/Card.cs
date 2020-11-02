@@ -22,5 +22,10 @@ namespace CardGame
         {
             Console.WriteLine(rank + " of " + suit);
         }
+
+        public string print()
+        {
+            return rank + " of " + suit;
+        }
     }
 }

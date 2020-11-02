@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CardGame
 {
-    class Player
+    public class Player
     {
         string player;
         Card[] hand = new Card[3];
@@ -18,8 +18,7 @@ namespace CardGame
         private void drawCard()
         {
             int cntr = index;
-            index = cardCap - 1;
-            
+            index = cardCap - 1;           
 
             if (cardCount == 4 || cardCount == 5)
             {
@@ -28,10 +27,11 @@ namespace CardGame
 
             while (cardCount < 4)
             {
-
-                hand[cntr] = GameManagr.playDeck.deck[GameManagr.playDeck.topOfDeck];
+                int topOfDeck = gameMGMT.playDeck.topOfDeck;
+                hand[cntr] = gameMGMT.playDeck.deck[topOfDeck];
                 cntr += 1;
-                GameManagr.playDeck.topOfDeck -= 1;
+                Console.WriteLine(printName() + " drew " + hand[cntr].print());
+                gameMGMT.playDeck.topOfDeck -= 1;
             }
         }
 
