@@ -10,7 +10,13 @@ namespace CardGame
     {
 
         private string rank;
-        private string suit;
+        public string suit;
+
+        public bool vulture = false;
+        public bool bomb = false;
+        public bool quarantine = false;
+        public bool joker = false;
+
 
         public Card(string a, string b)
         {

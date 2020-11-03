@@ -34,7 +34,7 @@ namespace CardGame
         };
 
         public Card[] deck = new Card[52];
-        public int topOfDeck = 52;
+        
 
         public void createDeck()
         {
