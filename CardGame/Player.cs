@@ -29,11 +29,14 @@ namespace CardGame
         public void startPlaying()
         {
             while (!gameMGMT.won)
+
             {
-                discard();
-                drawCard();
                 checkHand();
+                discard();
+                drawCard();                
+                cardTally();
             }
+            gameMGMT.checkWin();
         }
 
         private void drawCard()
@@ -51,7 +54,9 @@ namespace CardGame
 
                 if (hand[i] == null)
                 {
-                    hand[i] = gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
+                    
+                    hand[i] = 
+                        gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
                     Console.WriteLine(printName() + " drew " + hand[i].print());
                     cardHandler(hand[i]);
                     gameMGMT.topOfDeck--;
@@ -96,18 +101,19 @@ namespace CardGame
                 }
         }
 
-        
+        //Discard method, called first
         public void discard()
         {
             bool hasDiscarded = false;
 
             for (int i = 0; i < 4; i++)
             {
+                //Check if discard has happened so we don't need to loop through every iteration 
                 if (hasDiscarded == true)
                 {
                     break;
                 }
-
+                //Decission algorithm for what card to discard
                 if (hand[i].suit != popular || hand[i].joker != true)
                 {
                     gameMGMT.discardDeck.deck[gameMGMT.topOfDiscard] = hand[i];
@@ -119,11 +125,13 @@ namespace CardGame
             }
         }
 
+        //This handles all the possible special cards
         public void cardHandler(Card drawnCard)
         {
             if (drawnCard.bomb)
             {
                 int count = 0;
+                //Discard entire hand. TODO: make sure to put in discard pile
                 foreach(Card card in hand)
                 {
                     hand[count] = null;

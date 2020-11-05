@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace CardGame
 {
@@ -14,6 +14,11 @@ namespace CardGame
 
         public Deck playDeck = new Deck();
         public Deck discardDeck = new Deck();
+
+        Thread thread1;
+        Thread thread2;
+        Thread thread3;
+        Thread thread4;
 
         private static Player player1;
         private static Player player2;
@@ -77,18 +82,23 @@ namespace CardGame
 
             player1 = new Player("Player 1");
             player2 = new Player("Player 2");
+            thread1 = new Thread(player1.startPlaying);           
+            thread2 = new Thread(player2.startPlaying);
             playerList.Add(player1);
             playerList.Add(player2);
 
             if (players == 3)
             {
                 player3 = new Player("Player 3");
+                thread3 = new Thread(player3.startPlaying);
                 playerList.Add(player3);
             }
             else if(players == 4)
             {
                 player3 = new Player("Player 3");
                 player4 = new Player("Player 4");
+                thread3 = new Thread(player3.startPlaying);
+                thread4 = new Thread(player4.startPlaying);
                 playerList.Add(player3);
                 playerList.Add(player4);
             }
@@ -165,13 +175,24 @@ namespace CardGame
 
         private void startPlayers()
         {
+            int cntr = 0;
             foreach (Player playerInGame in playerList)
             {
-                playerInGame.startPlaying();
+                if (cntr == 0)
+                {
+                    thread1.Start();
+                    cntr++;
+                }
+                else if (cntr == 1)
+                {
+                    thread2.Start();
+                }
+                Thread.Sleep(200);
+                
             }
         }
 
-        private void checkWin()
+        public void checkWin()
         {
             int cntr = 0;
             foreach(Player player in playerList)
@@ -185,6 +206,7 @@ namespace CardGame
                         Console.WriteLine(player.hand[cntr].print());
                         cntr++;
                     }
+                    Console.ReadKey();
                 }
             }
         }

@@ -42,7 +42,7 @@ namespace CardGame
             int RankCounter = 0;
             int resetCounter = 0;
 
-            for (int i=0; i < 52; i++)
+            for (int i=0; i < deck.Length; i++)
             {
 
                 if(RankCounter >= 13)

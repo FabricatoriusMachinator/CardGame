@@ -8,7 +8,7 @@ namespace CardGame
 {
     class GameMain
     {
-        private static GameManagr gameMGMT = new GameManagr();
+        private static GameManagr gameMGMT = GameManagr.Instance;
 
         static void Main()
         {
@@ -31,6 +31,11 @@ namespace CardGame
 
             for (int i = 0; i < playDeck.deck.Length; i++)
             {
+                if (playDeck.deck[i] == null)
+                {
+                    Console.WriteLine("Null");
+                }
+
                 playDeck.deck[i].PrintCard();
             }
 
