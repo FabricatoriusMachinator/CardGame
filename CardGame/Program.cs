@@ -8,9 +8,16 @@ namespace CardGame
 {
     class GameMain
     {
+        private static GameManagr gameMGMT = new GameManagr();
+
         static void Main()
         {
-            Deck playDeck = new Deck();
+
+            gameMGMT.startGame();
+            
+            
+            
+            /*Deck playDeck = new Deck();
             playDeck.createDeck();
             
             for(int i = 0; i < playDeck.deck.Length; i++)
@@ -27,7 +34,7 @@ namespace CardGame
                 playDeck.deck[i].PrintCard();
             }
 
-            Console.ReadKey();
+            Console.ReadKey();*/
         }
     }
 }

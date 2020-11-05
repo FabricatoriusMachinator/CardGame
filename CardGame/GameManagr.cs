@@ -8,9 +8,11 @@ namespace CardGame
 {
     class GameManagr
     {
-        private static readonly GameManagr instance = new GameManagr();
+        private static GameManagr instance = null;
 
-        public static Deck playDeck = new Deck();
+        private static readonly object padLock = new object();
+
+        public Deck playDeck = new Deck();
         public Deck discardDeck = new Deck();
 
         private static Player player1;
@@ -18,32 +20,48 @@ namespace CardGame
         private static Player player3;
         private static Player player4;
 
+        private static List<Player> playerList = new List<Player>();
+
         private static int players = 0;
         public int topOfDiscard = 0;
-        public static int topOfDeck = 52;
+        public int topOfDeck = 51;
 
         public bool won = false;
 
 
-        private void startGame()
+        public static GameManagr Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (padLock)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new GameManagr();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+
+        public void startGame()
         {     
             playDeck.createDeck();
             playDeck.Shuffle();
             specialCardPrimer();
             setPlayerAmmount();
+            Console.WriteLine("Press any key when ready to start:");
+            Console.ReadKey();
+            Console.Clear();
+            startPlayers();
+
         }
 
-        public static GameManagr getInstance()
-        {
-            return instance;
-        }
 
-        public Deck getDeck()
-        {
-            return playDeck;
-        }
-
-        private static void setPlayerAmmount()
+        private void setPlayerAmmount()
         {
             Console.WriteLine("Enter number of players between 2 - 4:");
 
@@ -56,22 +74,31 @@ namespace CardGame
                 setPlayerAmmount();
                 return;
             }
-            else if (players == 3)
+
+            player1 = new Player("Player 1");
+            player2 = new Player("Player 2");
+            playerList.Add(player1);
+            playerList.Add(player2);
+
+            if (players == 3)
             {
                 player3 = new Player("Player 3");
+                playerList.Add(player3);
             }
             else if(players == 4)
             {
                 player3 = new Player("Player 3");
                 player4 = new Player("Player 4");
+                playerList.Add(player3);
+                playerList.Add(player4);
             }
 
-            player1 = new Player("Player 1");
-            player2 = new Player("Player 2");
+            
 
             dealPlayers(players);
             
         }
+
 
         private void specialCardPrimer()
         {
@@ -101,25 +128,35 @@ namespace CardGame
             }
         }
 
-        private static void dealPlayers(int playerNumber)
+        private void dealPlayers(int playerNumber)
         {
+
+            int cntr1 = 0;
+            int cntr2 = 0;
+            int cntr3 = 0;
+            int cntr4 = 0;
+
             for (int i = 0; i < playerNumber * 4; i++)
             {
                 if (i < 4)
                 {
-                    player1.hand[i] = playDeck.deck[topOfDeck];
+                    player1.hand[cntr1] = playDeck.deck[topOfDeck - 1];
+                    cntr1++;
                 }
                 else if (i < 8 && i > 4)
                 {
-                    player2.hand[i] = playDeck.deck[topOfDeck];
+                    player2.hand[cntr2] = playDeck.deck[topOfDeck];
+                    cntr2++;
                 }
                 else if (i < 12 && i > 8)
                 {
-                    player3.hand[i] = playDeck.deck[topOfDeck];
+                    player3.hand[cntr3] = playDeck.deck[topOfDeck];
+                    cntr3++;
                 }
                 else if(i > 12)
                 {
-                    player4.hand[i] = playDeck.deck[topOfDeck];
+                    player4.hand[cntr4] = playDeck.deck[topOfDeck];
+                    cntr4++;
                 }
                 topOfDeck--;
 
@@ -128,7 +165,28 @@ namespace CardGame
 
         private void startPlayers()
         {
+            foreach (Player playerInGame in playerList)
+            {
+                playerInGame.startPlaying();
+            }
+        }
 
+        private void checkWin()
+        {
+            int cntr = 0;
+            foreach(Player player in playerList)
+            {
+                if (player.hasWon == true)
+                {
+                    Console.WriteLine(player.printName() + " won with:");
+
+                    foreach (Card card in player.hand)
+                    {
+                        Console.WriteLine(player.hand[cntr].print());
+                        cntr++;
+                    }
+                }
+            }
         }
     }
 }

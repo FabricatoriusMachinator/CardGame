@@ -9,24 +9,54 @@ namespace CardGame
     class Player
     {
 
-        public Card[] hand = new Card[3];
-        GameManagr gameMGMT = GameManagr.getInstance();
-
-        int cardCount = 0;
-        int cardCap = 4;
-        int index = 0; //TODO: Create selection algorithm
+        public Card[] hand = new Card[4];
+        GameManagr gameMGMT = GameManagr.Instance;
 
         string player;
-        int cardScore;
-        string popular; 
+        string popular;
+        bool isVulture = false;
+
+        public delegate void onWin();
+        public event onWin winEvent;
+
+        public bool hasWon = false;
 
         public Player(string name)
         {
             this.player = name;
         }
 
+        public void startPlaying()
+        {
+            while (!gameMGMT.won)
+            {
+                discard();
+                drawCard();
+                checkHand();
+            }
+        }
+
         private void drawCard()
         {
+            int toSubtract = 1;
+
+            if (isVulture)
+            {
+                toSubtract = 0;
+            }
+
+            for (int i = 0; i < hand.Length - toSubtract; i++)
+            {
+                
+
+                if (hand[i] == null)
+                {
+                    hand[i] = gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
+                    Console.WriteLine(printName() + " drew " + hand[i].print());
+                    cardHandler(hand[i]);
+                    gameMGMT.topOfDeck--;
+                }
+            }
             
             Random random = new Random();
             int randomWait = random.Next(1000, 3000);
@@ -73,16 +103,61 @@ namespace CardGame
 
             for (int i = 0; i < 4; i++)
             {
-                if (hand[i].suit != popular || hand[i].joker != true)
-                {
-                    gameMGMT.discardDeck.deck[gameMGMT.topOfDiscard] = hand[i];
-                    hand[i] = null;
-                    hasDiscarded = true;
-                }
-                else if(hasDiscarded == true)
+                if (hasDiscarded == true)
                 {
                     break;
                 }
+
+                if (hand[i].suit != popular || hand[i].joker != true)
+                {
+                    gameMGMT.discardDeck.deck[gameMGMT.topOfDiscard] = hand[i];
+                    Console.WriteLine(printName() + " discarded " + hand[i].print());
+                    hand[i] = null;
+                    hasDiscarded = true;
+                }
+
+            }
+        }
+
+        public void cardHandler(Card drawnCard)
+        {
+            if (drawnCard.bomb)
+            {
+                int count = 0;
+                foreach(Card card in hand)
+                {
+                    hand[count] = null;
+                    count++;
+                }
+                drawCard();
+            }
+            else if (drawnCard.quarantine)
+            {
+                Thread.Sleep(10000);
+            }
+            else if (drawnCard.vulture)
+            {
+                isVulture = true;
+            }
+        }
+
+        public void cardTally()
+        {
+            int cardTally = 0;
+            int counter = 0;
+
+            foreach (Card card in hand)
+            {
+                if (hand[counter].suit == popular || hand[counter].joker == true)
+                {
+                    cardTally++;
+                }
+            }
+
+            if (cardTally == 4)
+            {
+                hasWon = true;
+                gameMGMT.won = true;
             }
         }
     }    
