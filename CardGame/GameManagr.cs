@@ -153,17 +153,17 @@ namespace CardGame
                     player1.hand[cntr1] = playDeck.deck[topOfDeck - 1];
                     cntr1++;
                 }
-                else if (i < 8 && i > 4)
+                else if (i < 8 && i > 3)
                 {
                     player2.hand[cntr2] = playDeck.deck[topOfDeck];
                     cntr2++;
                 }
-                else if (i < 12 && i > 8)
+                else if (i < 12 && i > 7)
                 {
                     player3.hand[cntr3] = playDeck.deck[topOfDeck];
                     cntr3++;
                 }
-                else if(i > 12)
+                else if(i > 11)
                 {
                     player4.hand[cntr4] = playDeck.deck[topOfDeck];
                     cntr4++;
@@ -186,9 +186,20 @@ namespace CardGame
                 else if (cntr == 1)
                 {
                     thread2.Start();
+                    cntr++;
                 }
-                Thread.Sleep(200);
                 
+                else if (cntr == 2)
+                {
+                    thread3.Start();
+                    cntr++;
+                }
+                else if(cntr == 3)
+                {
+                    thread4.Start();
+                }
+
+                Thread.Sleep(200);
             }
         }
 
