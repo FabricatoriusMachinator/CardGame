@@ -6,6 +6,8 @@ using System.Threading;
 
 namespace CardGame
 {
+
+    //This class manages the game and is the equivalent of a dealer
     class GameManagr
     {
         private static GameManagr instance = null;
@@ -20,6 +22,7 @@ namespace CardGame
         Thread thread3;
         Thread thread4;
 
+        //Declaring all the variable ahead of time
         private static Player player1;
         private static Player player2;
         private static Player player3;
@@ -34,6 +37,7 @@ namespace CardGame
         public bool won = false;
 
 
+        //Making sure there is only one instance of the class making it thread safe in order to avoid race conditions
         public static GameManagr Instance
         {
             get
@@ -52,6 +56,7 @@ namespace CardGame
             }
         }
 
+        //Starts the game and does the dealer job, such as shuffeling the deck, distrubuting card to the number of player, and deciding the special card
         public void startGame()
         {     
             playDeck.createDeck();
@@ -66,6 +71,7 @@ namespace CardGame
         }
 
 
+        //Takes the number of players for the game from the console, can't be lower than 2 or higer than 4
         private void setPlayerAmmount()
         {
             Console.WriteLine("Enter number of players between 2 - 4:");
@@ -80,6 +86,7 @@ namespace CardGame
                 return;
             }
 
+            //Decided to use a List here instead of an array due to the varying number of players
             player1 = new Player("Player 1");
             player2 = new Player("Player 2");
             thread1 = new Thread(player1.startPlaying);           
@@ -109,7 +116,7 @@ namespace CardGame
             
         }
 
-
+        //Assign four card special atrributes.
         private void specialCardPrimer()
         {
             Random random = new Random();
@@ -117,6 +124,8 @@ namespace CardGame
 
             for (int i = 0; i < 4; i++)
             {
+
+                //Could do that it is all the card but thought it was up to the dealer to decide what the cards are from the remaining deck
                 randomCard = random.Next(0, 39);
 
                 if (i == 0)
@@ -138,6 +147,7 @@ namespace CardGame
             }
         }
 
+        //Takes the number specified and distributes the cards on the number of players
         private void dealPlayers(int playerNumber)
         {
 
@@ -203,6 +213,7 @@ namespace CardGame
             }
         }
 
+        //Check for win, and prints the cards in the winning players hand
         public void checkWin()
         {
             int cntr = 0;

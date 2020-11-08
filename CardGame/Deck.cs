@@ -8,6 +8,7 @@ namespace CardGame
 {
     class Deck
     {
+        //Originally planned to use enums, though felt it was easier to use arrays for this
         string[] Suit =
         {
             "Diamonds",
@@ -35,13 +36,14 @@ namespace CardGame
 
         public Card[] deck = new Card[52];
         
-
+        //this creates the card
         public void createDeck()
         {
 
             int RankCounter = 0;
             int resetCounter = 0;
 
+            //Could've used a nested for loop, but easier to read like this
             for (int i=0; i < deck.Length; i++)
             {
 
@@ -56,6 +58,7 @@ namespace CardGame
             }
         }
 
+        //Using the Fisher-Yates shuffle algorithm
         public void Shuffle()
         {
             int deckLength = deck.Length;

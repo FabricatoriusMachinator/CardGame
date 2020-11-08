@@ -8,7 +8,7 @@ namespace CardGame
 {
     class Player
     {
-
+        //This class got all the functions that a normal player in real life would have responsibility over such as counter their own cards, draw/discard, and declaring wins
         public Card[] hand = new Card[4];
         GameManagr gameMGMT = GameManagr.Instance;
 
@@ -26,21 +26,30 @@ namespace CardGame
             this.player = name;
         }
 
+        //Start playing runs as long that no ones declares that they've won. Is called from the GameManager
         public void startPlaying()
         {
             while (!gameMGMT.won)
 
             {
                 checkHand();
+                cardTally();
+
+                if (gameMGMT.won == true)
+                {
+                    break;
+                }
                 discard();
                 drawCard();                
-                cardTally();
+                
             }
             gameMGMT.checkWin();
         }
 
+        //This is the method for drawing
         private void drawCard()
         {
+            //this variable is for the vulture card, if vulture is true, the loop will run 5 times
             int toSubtract = 1;
 
             if (isVulture)
@@ -68,11 +77,13 @@ namespace CardGame
             Thread.Sleep(randomWait);
         }
 
+        //This is just so that I can print the player name in various methods
         public string printName()
         {
             return player;
         }
 
+        //Checks hand for what is most common, this is where the player figures what card to discard;
         public void checkHand()
         {
             popular = hand[0].suit;
@@ -114,12 +125,17 @@ namespace CardGame
                     break;
                 }
                 //Decission algorithm for what card to discard
-                if (hand[i].suit != popular || hand[i].joker != true)
+                if (hand[i].suit != popular)
                 {
+                    if (hand[i].joker == true)
+                    {
+                        continue;
+                    }
                     gameMGMT.discardDeck.deck[gameMGMT.topOfDiscard] = hand[i];
                     Console.WriteLine(printName() + " discarded " + hand[i].print());
                     hand[i] = null;
                     hasDiscarded = true;
+                    
                 }
 
             }
@@ -149,6 +165,7 @@ namespace CardGame
             }
         }
 
+        //Here all the cards in the hand are counted and check if if he has won with four of one suit/3 + joker
         public void cardTally()
         {
             int cardTally = 0;
@@ -160,6 +177,7 @@ namespace CardGame
                 {
                     cardTally++;
                 }
+                
             }
 
             if (cardTally == 4)
@@ -167,6 +185,8 @@ namespace CardGame
                 hasWon = true;
                 gameMGMT.won = true;
             }
+            Console.WriteLine("Card tally was: " + cardTally);
+            Thread.Sleep(3000);
         }
     }    
 }
