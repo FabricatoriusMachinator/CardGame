@@ -10,11 +10,12 @@ namespace CardGame
     {
         //This class got all the functions that a normal player in real life would have responsibility over such as counter their own cards, draw/discard, and declaring wins
         public Card[] hand = new Card[4];
-        GameManagr gameMGMT = GameManagr.Instance;
+        GameManagr gameMGMT;
 
         string player;
         string popular;
         bool isVulture = false;
+        int toSubtract = 1;
 
         public delegate void onWin();
         public event onWin winEvent;
@@ -29,9 +30,12 @@ namespace CardGame
         //Start playing runs as long that no ones declares that they've won. Is called from the GameManager
         public void startPlaying()
         {
-            while (!gameMGMT.won)
+
+            while (!hasWon)
 
             {
+                gameMGMT = GameManagr.Instance;
+
                 checkHand();
                 cardTally();
 
@@ -43,14 +47,14 @@ namespace CardGame
                 drawCard();                
                 
             }
-            gameMGMT.checkWin();
+            
         }
 
         //This is the method for drawing
         private void drawCard()
         {
             //this variable is for the vulture card, if vulture is true, the loop will run 5 times
-            int toSubtract = 1;
+            
 
             if (isVulture)
             {
@@ -67,8 +71,9 @@ namespace CardGame
                     hand[i] = 
                         gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
                     Console.WriteLine(printName() + " drew " + hand[i].print());
-                    cardHandler(hand[i]);
                     gameMGMT.topOfDeck--;
+                    cardHandler(hand[i]);
+                    
                 }
             }
             
@@ -86,7 +91,7 @@ namespace CardGame
         //Checks hand for what is most common, this is where the player figures what card to discard;
         public void checkHand()
         {
-            popular = hand[0].suit;
+            //popular = hand[0].suit;
             int counter = 1;
             int tempCounter;
             string temp;
@@ -146,21 +151,24 @@ namespace CardGame
         {
             if (drawnCard.bomb)
             {
-                int count = 0;
+                
                 //Discard entire hand. TODO: make sure to put in discard pile
-                foreach(Card card in hand)
+                Console.WriteLine("BOOM! " + printName() + " drew the bomb");
+                for (int i = 0; i < hand.Length - toSubtract; i++)
                 {
-                    hand[count] = null;
-                    count++;
+                    hand[i] = null;
+                    
                 }
                 drawCard();
             }
             else if (drawnCard.quarantine)
             {
+                Console.WriteLine("Oh no! It's quarantine for " + printName());
                 Thread.Sleep(10000);
             }
             else if (drawnCard.vulture)
             {
+                Console.WriteLine("Greedy! " + printName() + " is a Vulture");
                 isVulture = true;
             }
         }
@@ -177,6 +185,7 @@ namespace CardGame
                 {
                     cardTally++;
                 }
+                counter++;
                 
             }
 
@@ -184,8 +193,9 @@ namespace CardGame
             {
                 hasWon = true;
                 gameMGMT.won = true;
+                gameMGMT.checkWin();
             }
-            Console.WriteLine("Card tally was: " + cardTally);
+            
             Thread.Sleep(3000);
         }
     }    

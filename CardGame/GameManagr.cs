@@ -225,6 +225,13 @@ namespace CardGame
 
                     foreach (Card card in player.hand)
                     {
+                        if(card.joker == true)
+                        {
+                            Console.WriteLine(player.hand[cntr].print() + " and is Joker");
+                            cntr++;
+                            continue;
+                        }
+
                         Console.WriteLine(player.hand[cntr].print());
                         cntr++;
                     }
@@ -232,5 +239,13 @@ namespace CardGame
                 }
             }
         }
+
+        public void reShuffle()
+        {
+
+        }
+
+
+
     }
 }
