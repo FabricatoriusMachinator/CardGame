@@ -109,7 +109,13 @@ namespace CardGame
                 playerList.Add(player3);
                 playerList.Add(player4);
             }
+            int cntr = 0;
+            foreach (Player player in playerList)
+            {
+                cntr++;
+            }
 
+            Console.WriteLine(cntr + " players will play this game.");
             
 
             dealPlayers(players);
@@ -209,7 +215,7 @@ namespace CardGame
                     thread4.Start();
                 }
 
-                Thread.Sleep(200);
+                
             }
         }
 
@@ -225,6 +231,10 @@ namespace CardGame
 
                     foreach (Card card in player.hand)
                     {
+                        if(card == null)
+                        {
+                            continue;
+                        }
                         if(card.joker == true)
                         {
                             Console.WriteLine(player.hand[cntr].print() + " and is Joker");

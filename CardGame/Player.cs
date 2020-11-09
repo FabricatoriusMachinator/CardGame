@@ -9,7 +9,7 @@ namespace CardGame
     class Player
     {
         //This class got all the functions that a normal player in real life would have responsibility over such as counter their own cards, draw/discard, and declaring wins
-        public Card[] hand = new Card[4];
+        public Card[] hand = new Card[5];
         GameManagr gameMGMT;
 
         string player;
@@ -103,8 +103,16 @@ namespace CardGame
 
                     for (int j = 1; j < hand.Length; j++)
                     {
-                        if (temp == hand[j].suit)
+                        if (j == 4 && isVulture == false)
                         {
+                        continue;
+                        }
+                        if (hand[j] == null)
+                        {
+                        drawCard();
+                        }
+                        if (temp == hand[j].suit)
+                        {                            
                             tempCounter++;
                         }
                     }
@@ -181,6 +189,10 @@ namespace CardGame
 
             foreach (Card card in hand)
             {
+                if (hand[counter] == null)
+                {
+                    continue;
+                }
                 if (hand[counter].suit == popular || hand[counter].joker == true)
                 {
                     cardTally++;
