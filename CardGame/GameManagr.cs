@@ -12,9 +12,9 @@ namespace CardGame
     {
         private static GameManagr instance = null;
 
-        private static readonly object padLock = new object();
-
+        //public Deck playDeck = new Deck();
         public Deck playDeck = new Deck();
+        //public Deck discardDeck = new Deck();
         public Deck discardDeck = new Deck();
 
         Thread thread1;
@@ -44,13 +44,11 @@ namespace CardGame
             {
                 if (instance == null)
                 {
-                    lock (padLock)
-                    {
                         if (instance == null)
                         {
                             instance = new GameManagr();
                         }
-                    }
+                    
                 }
                 return instance;
             }
@@ -68,6 +66,13 @@ namespace CardGame
             Console.Clear();
             startPlayers();
 
+            /*while(won != true)
+            {
+                if(topOfDeck < 0)
+                {
+                    reShuffle();
+                }
+            }*/
         }
 
 
@@ -136,19 +141,19 @@ namespace CardGame
 
                 if (i == 0)
                 {
-                    playDeck.deck[randomCard].vulture = true;
+                    playDeck.teck[randomCard].vulture = true;
                 }
                 else if (i == 1)
                 {
-                    playDeck.deck[randomCard].bomb = true;
+                    playDeck.teck[randomCard].bomb = true;
                 }
                 else if (i == 2)
                 {
-                    playDeck.deck[randomCard].quarantine = true;
+                    playDeck.teck[randomCard].quarantine = true;
                 }
                 else if(i == 3)
                 {
-                    playDeck.deck[randomCard].joker = true;
+                    playDeck.teck[randomCard].joker = true;
                 }
             }
         }
@@ -166,22 +171,22 @@ namespace CardGame
             {
                 if (i < 4)
                 {
-                    player1.hand[cntr1] = playDeck.deck[topOfDeck - 1];
+                    player1.hand[cntr1] = playDeck.teck[topOfDeck - 1];
                     cntr1++;
                 }
                 else if (i < 8 && i > 3)
                 {
-                    player2.hand[cntr2] = playDeck.deck[topOfDeck];
+                    player2.hand[cntr2] = playDeck.teck[topOfDeck];
                     cntr2++;
                 }
                 else if (i < 12 && i > 7)
                 {
-                    player3.hand[cntr3] = playDeck.deck[topOfDeck];
+                    player3.hand[cntr3] = playDeck.teck[topOfDeck];
                     cntr3++;
                 }
                 else if(i > 11)
                 {
-                    player4.hand[cntr4] = playDeck.deck[topOfDeck];
+                    player4.hand[cntr4] = playDeck.teck[topOfDeck];
                     cntr4++;
                 }
                 topOfDeck--;
@@ -213,9 +218,7 @@ namespace CardGame
                 else if(cntr == 3)
                 {
                     thread4.Start();
-                }
-
-                
+                }               
             }
         }
 
@@ -252,7 +255,9 @@ namespace CardGame
 
         public void reShuffle()
         {
-
+            playDeck = discardDeck;
+            topOfDeck = playDeck.teck.Count();
+            Console.WriteLine("Deck has been reshuffled");
         }
 
 

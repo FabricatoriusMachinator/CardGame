@@ -11,6 +11,7 @@ namespace CardGame
         //This class got all the functions that a normal player in real life would have responsibility over such as counter their own cards, draw/discard, and declaring wins
         public Card[] hand = new Card[5];
         GameManagr gameMGMT;
+        private static readonly object thisLock = new Object(); 
 
         string player;
         string popular;
@@ -54,29 +55,38 @@ namespace CardGame
         private void drawCard()
         {
             //this variable is for the vulture card, if vulture is true, the loop will run 5 times
-            
 
-            if (isVulture)
+            lock (thisLock)
             {
-                toSubtract = 0;
-            }
-
-            for (int i = 0; i < hand.Length - toSubtract; i++)
-            {
-                
-
-                if (hand[i] == null)
+                if(gameMGMT.topOfDeck < 0)
                 {
-                    
-                    hand[i] = 
-                        gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
-                    Console.WriteLine(printName() + " drew " + hand[i].print());
-                    gameMGMT.topOfDeck--;
-                    cardHandler(hand[i]);
-                    
+                    gameMGMT.reShuffle();
+                    gameMGMT.topOfDeck = gameMGMT.playDeck.teck.Count();
+                    gameMGMT.discardDeck.teck.RemoveRange(0, gameMGMT.discardDeck.teck.Count());
                 }
-            }
-            
+
+
+                if (isVulture)
+                {
+                    toSubtract = 0;
+                }
+
+                for (int i = 0; i < hand.Length - toSubtract; i++)
+                {
+
+
+                    if (hand[i] == null)
+                    {
+
+                        hand[i] =
+                            gameMGMT.playDeck.teck[gameMGMT.topOfDeck]; //is null for some reason
+                        Console.WriteLine(printName() + " drew " + hand[i].print());
+                        gameMGMT.topOfDeck--;
+                        cardHandler(hand[i]);
+
+                    }
+                }
+            }    
             Random random = new Random();
             int randomWait = random.Next(1000, 3000);
             Thread.Sleep(randomWait);
@@ -144,7 +154,7 @@ namespace CardGame
                     {
                         continue;
                     }
-                    gameMGMT.discardDeck.deck[gameMGMT.topOfDiscard] = hand[i];
+                    gameMGMT.discardDeck.teck.Add(hand[i]);
                     Console.WriteLine(printName() + " discarded " + hand[i].print());
                     hand[i] = null;
                     hasDiscarded = true;
