@@ -12,8 +12,6 @@ namespace CardGame
     {
         private static GameManagr instance = null;
 
-        private static readonly object padLock = new object();
-
         public Deck playDeck = new Deck();
         public Deck discardDeck = new Deck();
 
@@ -44,13 +42,11 @@ namespace CardGame
             {
                 if (instance == null)
                 {
-                    lock (padLock)
-                    {
                         if (instance == null)
                         {
                             instance = new GameManagr();
                         }
-                    }
+                    
                 }
                 return instance;
             }
@@ -67,7 +63,6 @@ namespace CardGame
             Console.ReadKey();
             Console.Clear();
             startPlayers();
-
         }
 
 
@@ -213,9 +208,7 @@ namespace CardGame
                 else if(cntr == 3)
                 {
                     thread4.Start();
-                }
-
-                
+                }               
             }
         }
 
@@ -252,7 +245,9 @@ namespace CardGame
 
         public void reShuffle()
         {
-
+            playDeck = discardDeck;
+            topOfDeck = playDeck.deck.Count();
+            Console.WriteLine("Deck has been reshuffled");
         }
 
 

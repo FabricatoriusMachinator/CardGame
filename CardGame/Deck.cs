@@ -34,7 +34,7 @@ namespace CardGame
             "King"
         };
 
-        public Card[] deck = new Card[52];
+        public List<Card> deck = new List<Card>();
         
         //this creates the card
         public void createDeck()
@@ -44,7 +44,7 @@ namespace CardGame
             int resetCounter = 0;
 
             //Could've used a nested for loop, but easier to read like this
-            for (int i=0; i < deck.Length; i++)
+            for (int i=0; i < 52; i++)
             {
 
                 if(RankCounter >= 13)
@@ -53,7 +53,8 @@ namespace CardGame
                     resetCounter++;
                 }
 
-                deck[i] = new Card(Rank[RankCounter], Suit[resetCounter]);
+                //deck[i] = new Card(Rank[RankCounter], Suit[resetCounter]);
+                deck.Add(new Card(Rank[RankCounter], Suit[resetCounter]));
                 RankCounter++;
             }
         }
@@ -61,7 +62,7 @@ namespace CardGame
         //Using the Fisher-Yates shuffle algorithm
         public void Shuffle()
         {
-            int deckLength = deck.Length;
+            int deckLength = deck.Count();
             Card temp;
             Random random = new Random();
             
