@@ -34,8 +34,7 @@ namespace CardGame
             "King"
         };
 
-        //public Card[] deck = new Card[52];
-        public List<Card> teck = new List<Card>();
+        public List<Card> deck = new List<Card>();
         
         //this creates the card
         public void createDeck()
@@ -55,7 +54,7 @@ namespace CardGame
                 }
 
                 //deck[i] = new Card(Rank[RankCounter], Suit[resetCounter]);
-                teck.Add(new Card(Rank[RankCounter], Suit[resetCounter]));
+                deck.Add(new Card(Rank[RankCounter], Suit[resetCounter]));
                 RankCounter++;
             }
         }
@@ -63,7 +62,7 @@ namespace CardGame
         //Using the Fisher-Yates shuffle algorithm
         public void Shuffle()
         {
-            int deckLength = teck.Count();
+            int deckLength = deck.Count();
             Card temp;
             Random random = new Random();
             
@@ -72,9 +71,9 @@ namespace CardGame
             {
                 int intRandom = random.Next(0, 51);
                 deckLength--;
-                temp = teck[deckLength];
-                teck[deckLength] = teck[intRandom];
-                teck[intRandom] = temp;
+                temp = deck[deckLength];
+                deck[deckLength] = deck[intRandom];
+                deck[intRandom] = temp;
             }
         }
 

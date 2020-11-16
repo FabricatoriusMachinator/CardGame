@@ -6,40 +6,15 @@ using System.Threading.Tasks;
 
 namespace CardGame
 {
+    //Facade
     class GameMain
     {
         private static GameManagr gameMGMT = GameManagr.Instance;
-
+        
         static void Main()
         {
 
             gameMGMT.startGame();
-            
-            
-            
-            /*Deck playDeck = new Deck();
-            playDeck.createDeck();
-            
-            for(int i = 0; i < playDeck.deck.Length; i++)
-            {
-                playDeck.deck[i].PrintCard();
-            }
-
-            Console.ReadKey();
-            Console.Clear();
-            playDeck.Shuffle();
-
-            for (int i = 0; i < playDeck.deck.Length; i++)
-            {
-                if (playDeck.deck[i] == null)
-                {
-                    Console.WriteLine("Null");
-                }
-
-                playDeck.deck[i].PrintCard();
-            }
-
-            Console.ReadKey();*/
         }
     }
 }

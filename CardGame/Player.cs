@@ -61,8 +61,8 @@ namespace CardGame
                 if(gameMGMT.topOfDeck < 0)
                 {
                     gameMGMT.reShuffle();
-                    gameMGMT.topOfDeck = gameMGMT.playDeck.teck.Count();
-                    gameMGMT.discardDeck.teck.RemoveRange(0, gameMGMT.discardDeck.teck.Count());
+                    gameMGMT.topOfDeck = gameMGMT.playDeck.deck.Count();
+                    gameMGMT.discardDeck.deck.RemoveRange(0, gameMGMT.discardDeck.deck.Count());
                 }
 
 
@@ -79,7 +79,7 @@ namespace CardGame
                     {
 
                         hand[i] =
-                            gameMGMT.playDeck.teck[gameMGMT.topOfDeck]; //is null for some reason
+                            gameMGMT.playDeck.deck[gameMGMT.topOfDeck]; //is null for some reason
                         Console.WriteLine(printName() + " drew " + hand[i].print());
                         gameMGMT.topOfDeck--;
                         cardHandler(hand[i]);
@@ -154,7 +154,7 @@ namespace CardGame
                     {
                         continue;
                     }
-                    gameMGMT.discardDeck.teck.Add(hand[i]);
+                    gameMGMT.discardDeck.deck.Add(hand[i]);
                     Console.WriteLine(printName() + " discarded " + hand[i].print());
                     hand[i] = null;
                     hasDiscarded = true;
