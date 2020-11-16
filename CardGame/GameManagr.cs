@@ -247,6 +247,7 @@ namespace CardGame
         {
             playDeck = discardDeck;
             topOfDeck = playDeck.deck.Count();
+            discardDeck.deck.Clear();
             Console.WriteLine("Deck has been reshuffled");
         }
 

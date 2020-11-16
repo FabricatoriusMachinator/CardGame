@@ -18,8 +18,7 @@ namespace CardGame
         bool isVulture = false;
         int toSubtract = 1;
 
-        public delegate void onWin();
-        public event onWin winEvent;
+        
 
         public bool hasWon = false;
 
